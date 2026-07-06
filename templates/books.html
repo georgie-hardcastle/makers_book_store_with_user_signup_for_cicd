@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>Book Store</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+</head>
+<body>
+    <h1>Books in stock</h1>
+    <ul>
+        {% for book in books %}
+        <li>{{ book.title }} by {{ book.author }}</li>
+        {% endfor %}
+    </ul>
+    <form method="POST" action="/books">
+    <input type="text" name="title" placeholder="Title">
+    <input type="text" name="author" placeholder="Author">
+    <input type="submit" value="Submit">
+</form>
+
+    </body>
+</html>
