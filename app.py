@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect
 from databaseconnection import DatabaseConnection
 from bookrepository import BookRepository
 from book import Book
+from userrepository import UserRepository
+from user import User
 
 # instantiate a Flask app object
 app = Flask(__name__)
@@ -76,6 +78,27 @@ def add_new_book():
     book_repository.create_book(book)
 
     return redirect("/books")
+
+@app.route("/users/new", methods=["GET"])
+def get_signup_page():
+    return render_template("signup_form.html")
+
+@app.route("/thanks", methods=["GET"])
+def get_thanks_page():
+    return render_template("thanks.html")
+
+@app.route("/users", methods=["POST"])
+def add_new_user():
+    connection = DatabaseConnection()
+    connection.connect()
+    user_repository = UserRepository(connection)
+
+    new_user = request.form
+    user = User(username=new_user["username"], password=new_user["password"])
+
+    user_repository.create_user(user)
+
+    return redirect("/thanks")
 
 
 
