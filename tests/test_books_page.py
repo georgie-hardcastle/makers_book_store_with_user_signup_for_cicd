@@ -33,13 +33,22 @@ form on the books page.
 def test_add_book_form_creates_new_book(page: Page):
     connection = DatabaseConnection()
     connection.connect()
-    connection.seed("./seeds/books.sql")
 
+    # first, create a test user so that Playwright can log in
+    connection.execute("TRUNCATE TABLE users;")
+    connection.execute("INSERT INTO users (username, password) VALUES ('testuser', '1234');")
+
+    # make playwright log in to the site using the testuser account
+    page.goto("http://127.0.0.1:5001/sessions/new")
+    page.get_by_placeholder("Enter your username").fill("testuser")
+    page.get_by_placeholder("Enter your password").fill("1234")
+    page.get_by_role("button").click()
+
+
+    # try to create a new book
     page.goto("http://127.0.0.1:5001/books")
-
     page.get_by_placeholder("Title").fill("One Hundred Years of Solitude")
     page.get_by_placeholder("Author").fill("Gabriel Garcia Marquez")
-
     page.get_by_role("button", name="Submit").click()
 
     new_book = page.get_by_text("One Hundred Years of Solitude")

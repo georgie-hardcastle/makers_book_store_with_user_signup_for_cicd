@@ -47,6 +47,7 @@ jobs:
               docker run \
                 --name book_store_db \
                 --network book_store_network \
+                --restart unless-stopped \
                 -e POSTGRES_USER='${{ secrets.POSTGRES_USER }}' \
                 -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
                 -e POSTGRES_DB='book_store' \
